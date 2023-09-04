@@ -1,5 +1,6 @@
 package com.kmhoon.producers;
 
+import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -12,7 +13,7 @@ import java.util.Properties;
 
 public class ProducerASyncCustomCB {
 
-    public static  final Logger logger = LoggerFactory.getLogger(ProducerASyncCustomCB.class.getName());
+    public static final Logger logger = LoggerFactory.getLogger(ProducerASyncCustomCB.class.getName());
 
     public static void main(String[] args) {
         // Properties
@@ -27,18 +28,9 @@ public class ProducerASyncCustomCB {
         for (int i = 0; i < 20; i++) {
             // ProducerRecord
             ProducerRecord<Integer, String> producerRecord = new ProducerRecord<>("multipart-topic", i, "hello world " + i);
-            logger.info("i:" + i);
+            Callback callback = new CustomCallback(i);
             //KafkaProducer send Message
-            kafkaProducer.send(producerRecord, (recordMetadata, exception) -> {
-                if(exception == null) {
-                    logger.info("\n ##### record Metadata received ##### \n" +
-                            "partition:" + recordMetadata.partition() + "\n" +
-                            "offset:" + recordMetadata.offset() + "\n" +
-                            "timestamp:" + recordMetadata.timestamp());
-                } else {
-                    logger.error("exception error from broker " + exception.getMessage());
-                }
-            });
+            kafkaProducer.send(producerRecord, callback);
         }
 
 
