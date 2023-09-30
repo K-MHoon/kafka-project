@@ -15,6 +15,8 @@ dependencies {
     implementation 'org.slf4j:slf4j-simple:1.7.36'
     implementation group: 'com.github.javafaker', name: 'javafaker', version: '1.0.2'
     implementation 'org.postgresql:postgresql:42.6.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
 }
 
 test {
